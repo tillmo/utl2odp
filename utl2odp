@@ -15,7 +15,7 @@ do
 done
 rm xx[0-9]*
 cat headers-footers/doc-footer.xml >> $OUT
-pushd template
-zip $1.odp *
-popd
+pushd template >/dev/null
+zip ../$1.odp * >/dev/null
+popd >/dev/null
 
