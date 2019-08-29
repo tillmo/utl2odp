@@ -1,0 +1,21 @@
+#!/bin/bash
+tr '\n' '!' < $1 | sed 's/{[ !\t]*}/{}/g' | sed 's/!!/!/g' | tr '!' '\n' | csplit - '/-- [0-9]/' '{*}' >/dev/null
+OUT=template/content.xml
+cat headers-footers/doc-header.xml > $OUT
+for i in xx[0-9]*
+do	 
+  cat headers-footers/page-header.xml >> $OUT
+    while IFS= read -r line
+    do
+      cat headers-footers/line-header.xml >> $OUT
+      echo -n "$line" >> $OUT
+      cat headers-footers/line-footer.xml >> $OUT
+    done < "$i"
+  cat headers-footers/page-footer.xml >> $OUT
+done
+rm xx[0-9]*
+cat headers-footers/doc-footer.xml >> $OUT
+pushd template
+zip $1.odp *
+popd
+
